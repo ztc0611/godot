@@ -40,6 +40,8 @@
 #include "scene/gui/menu_bar.h"
 #include "scene/theme/theme_db.h"
 
+HashMap<String, PopupMenu *> PopupMenu::special_menus;
+
 String PopupMenu::bind_global_menu() {
 #ifdef TOOLS_ENABLED
 	if (is_part_of_edited_scene()) {
@@ -54,8 +56,20 @@ String PopupMenu::bind_global_menu() {
 		return global_menu_name; // Already bound;
 	}
 
-	DisplayServer *ds = DisplayServer::get_singleton();
 	global_menu_name = "__PopupMenu#" + itos(get_instance_id());
+	if (special_menu_name.length() > 0) {
+		if (special_menus.has(special_menu_name)) {
+			WARN_PRINT(vformat("Attempting to bind PopupMenu to the special menu %s, but another menu is already bound to it. This menu: %s, current menu: %s", special_menu_name, this->get_description(), special_menus[special_menu_name]->get_description()));
+		} else {
+			const Dictionary &supported_special_names = DisplayServer::get_singleton()->global_menu_get_special_menu_roots();
+			if (supported_special_names.has(special_menu_name)) {
+				special_menus[special_menu_name] = this;
+				global_menu_name = special_menu_name;
+			}
+		}
+	}
+
+	DisplayServer *ds = DisplayServer::get_singleton();
 	ds->global_menu_set_popup_callbacks(global_menu_name, callable_mp(this, &PopupMenu::_about_to_popup), callable_mp(this, &PopupMenu::_about_to_close));
 	for (int i = 0; i < items.size(); i++) {
 		Item &item = items.write[i];
@@ -105,6 +119,10 @@ void PopupMenu::unbind_global_menu() {
 		return;
 	}
 
+	if (global_menu_name == special_menu_name && special_menus[special_menu_name] == this) {
+		special_menus.erase(special_menu_name);
+	}
+
 	for (int i = 0; i < items.size(); i++) {
 		Item &item = items.write[i];
 		if (!item.submenu.is_empty()) {
@@ -118,6 +136,24 @@ void PopupMenu::unbind_global_menu() {
 	DisplayServer::get_singleton()->global_menu_clear(global_menu_name);
 
 	global_menu_name = String();
+}
+
+bool PopupMenu::is_special_menu() const {
+	return (global_menu_name == special_menu_name) && (special_menu_name.length() > 0);
+}
+
+void PopupMenu::set_special_menu_root(const String &p_special) {
+	if (is_inside_tree() && special_menu_name.length() > 0) {
+		unbind_global_menu();
+	}
+	special_menu_name = p_special;
+	if (is_inside_tree() && special_menu_name.length() > 0) {
+		bind_global_menu();
+	}
+}
+
+String PopupMenu::get_special_menu_root() const {
+	return special_menu_name;
 }
 
 String PopupMenu::_get_accel_text(const Item &p_item) const {
@@ -946,6 +982,15 @@ void PopupMenu::_notification(int p_what) {
 			}
 			if (!is_embedded()) {
 				set_flag(FLAG_NO_FOCUS, true);
+			}
+			if (special_menu_name.length() > 0) {
+				bind_global_menu();
+			}
+		} break;
+
+		case NOTIFICATION_EXIT_TREE: {
+			if (special_menu_name.length() > 0) {
+				unbind_global_menu();
 			}
 		} break;
 
@@ -2711,11 +2756,16 @@ void PopupMenu::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_allow_search", "allow"), &PopupMenu::set_allow_search);
 	ClassDB::bind_method(D_METHOD("get_allow_search"), &PopupMenu::get_allow_search);
 
+	ClassDB::bind_method(D_METHOD("is_special_menu"), &PopupMenu::is_special_menu);
+	ClassDB::bind_method(D_METHOD("set_special_menu_root", "special"), &PopupMenu::set_special_menu_root);
+	ClassDB::bind_method(D_METHOD("get_special_menu_root"), &PopupMenu::get_special_menu_root);
+
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "hide_on_item_selection"), "set_hide_on_item_selection", "is_hide_on_item_selection");
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "hide_on_checkable_item_selection"), "set_hide_on_checkable_item_selection", "is_hide_on_checkable_item_selection");
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "hide_on_state_item_selection"), "set_hide_on_state_item_selection", "is_hide_on_state_item_selection");
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "submenu_popup_delay", PROPERTY_HINT_NONE, "suffix:s"), "set_submenu_popup_delay", "get_submenu_popup_delay");
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "allow_search"), "set_allow_search", "get_allow_search");
+	ADD_PROPERTY(PropertyInfo(Variant::STRING, "special_menu_root", PROPERTY_HINT_ENUM, "Dock (macOS):_dock,Apple Menu(macOS):_apple,Window Menu(macOS):_window,Help Menu(macOS):_help"), "set_special_menu_root", "get_special_menu_root");
 
 	ADD_ARRAY_COUNT("Items", "item_count", "set_item_count", "get_item_count", "item_");
 

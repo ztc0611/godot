@@ -346,6 +346,12 @@
 				Returns [code]true[/code] if the specified item's shortcut is disabled.
 			</description>
 		</method>
+		<method name="is_special_menu" qualifiers="const">
+			<return type="bool" />
+			<description>
+				Returns [code]true[/code] if the menu is bound to the special system menu.
+			</description>
+		</method>
 		<method name="remove_item">
 			<return type="void" />
 			<param index="0" name="index" type="int" />
@@ -562,6 +568,9 @@
 		</member>
 		<member name="item_count" type="int" setter="set_item_count" getter="get_item_count" default="0">
 			The number of items currently in the list.
+		</member>
+		<member name="special_menu_root" type="String" setter="set_special_menu_root" getter="get_special_menu_root" default="&quot;&quot;">
+			If set to one of values returned by [method DisplayServer.global_menu_get_special_menu_roots], this [PopupMenu] is bound to the special system menu. Only one [PopupMenu] can be bound to each special menu at a time.
 		</member>
 		<member name="submenu_popup_delay" type="float" setter="set_submenu_popup_delay" getter="get_submenu_popup_delay" default="0.3">
 			Sets the delay time in seconds for the submenu item to popup on mouse hovering. If the popup menu is added as a child of another (acting as a submenu), it will inherit the delay time of the parent menu item.
