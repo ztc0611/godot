@@ -125,7 +125,7 @@
 			Notification received from the OS when the application is paused.
 			Specific to the Android and iOS platforms.
 			.. note::
-				On iOS, you only have approximately 5 seconds to finish a task started by this signal. If you go over this allotment, iOS will kill the app instead of pausing it.
+			[b]Note:[/b] On iOS, you only have approximately 5 seconds to finish a task started by this signal. If you go over this allotment, iOS will kill the app instead of pausing it.
 		</constant>
 		<constant name="NOTIFICATION_APPLICATION_FOCUS_IN" value="2016">
 			Notification received from the OS when the application is focused, i.e. when changing the focus from the OS desktop or a thirdparty application to any open window of the Godot instance.
