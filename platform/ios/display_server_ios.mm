@@ -442,7 +442,7 @@ int DisplayServerIOS::screen_get_dpi(int p_screen) const {
 	}
 }
 
-void DisplayServerIOS::ios_set_ui_state(bool hide_home_indicator, bool suppress_bottom_ui_gesture, bool suppress_top_ui_gesture, bool hide_status_bar, float status_bar_fade_time) {
+void DisplayServerIOS::ios_set_ui_state(bool p_hide_home_indicator, bool p_suppress_bottom_ui_gesture, bool p_suppress_top_ui_gesture, bool p_hide_status_bar, float p_status_bar_fade_time) {
 
 	ProjectSettings::get_singleton()->set_setting("display/window/ios/hide_home_indicator", hide_home_indicator);
 	ProjectSettings::get_singleton()->set_setting("display/window/ios/suppress_bottom_ui_gesture", suppress_bottom_ui_gesture);
