@@ -154,7 +154,7 @@ public:
 	virtual int screen_get_dpi(int p_screen = SCREEN_OF_MAIN_WINDOW) const override;
 	virtual float screen_get_scale(int p_screen = SCREEN_OF_MAIN_WINDOW) const override;
 
-	virtual void ios_set_ui_state(bool hide_home_indicator, bool suppress_bottom_ui_gesture, bool suppress_top_ui_gesture, bool hide_status_bar = true, float status_bar_fade_time = 0.2) override;
+	virtual void ios_set_ui_state(bool p_hide_home_indicator, bool p_suppress_bottom_ui_gesture, bool p_suppress_top_ui_gesture, bool p_hide_status_bar = true, float p_status_bar_fade_time = 0.2) override;
 
 	virtual float screen_get_refresh_rate(int p_screen = SCREEN_OF_MAIN_WINDOW) const override;
 
