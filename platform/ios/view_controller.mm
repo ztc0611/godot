@@ -222,7 +222,6 @@
 }
 
 - (UIRectEdge)preferredScreenEdgesDeferringSystemGestures {
-
 	bool top_gesture = GLOBAL_GET("display/window/ios/suppress_top_ui_gesture");
 	bool bottom_gesture = GLOBAL_GET("display/window/ios/suppress_bottom_ui_gesture");
 
