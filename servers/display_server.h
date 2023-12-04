@@ -306,6 +306,9 @@ public:
 		}
 		return scale;
 	}
+
+	virtual void ios_set_ui_state(bool hide_home_indicator, bool suppress_bottom_ui_gesture, bool suppress_top_ui_gesture, bool hide_status_bar = true, float status_bar_fade_time = 0.2);
+	
 	virtual float screen_get_refresh_rate(int p_screen = SCREEN_OF_MAIN_WINDOW) const = 0;
 	virtual Color screen_get_pixel(const Point2i &p_position) const { return Color(); };
 	virtual Ref<Image> screen_get_image(int p_screen = SCREEN_OF_MAIN_WINDOW) const { return Ref<Image>(); };

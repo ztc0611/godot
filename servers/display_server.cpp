@@ -411,6 +411,10 @@ float DisplayServer::screen_get_scale(int p_screen) const {
 	return 1.0f;
 };
 
+void DisplayServer::ios_set_ui_state(bool hide_home_indicator, bool suppress_bottom_ui_gesture, bool suppress_top_ui_gesture, bool hide_status_bar, float status_bar_fade_time) {
+	WARN_PRINT("iOS UI not supported by this display server.");
+}
+
 bool DisplayServer::is_touchscreen_available() const {
 	return Input::get_singleton() && Input::get_singleton()->is_emulating_touch_from_mouse();
 }
@@ -698,6 +702,7 @@ void DisplayServer::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("screen_get_scale", "screen"), &DisplayServer::screen_get_scale, DEFVAL(SCREEN_OF_MAIN_WINDOW));
 	ClassDB::bind_method(D_METHOD("is_touchscreen_available"), &DisplayServer::is_touchscreen_available, DEFVAL(SCREEN_OF_MAIN_WINDOW));
 	ClassDB::bind_method(D_METHOD("screen_get_max_scale"), &DisplayServer::screen_get_max_scale);
+	ClassDB::bind_method(D_METHOD("ios_set_ui_state", "hide_home_indicator", "suppress_bottom_ui_gesture", "suppress_top_ui_gesture", "hide_status_bar", "status_bar_fade_time"), &DisplayServer::ios_set_ui_state, DEFVAL(true), DEFVAL(0.2));
 	ClassDB::bind_method(D_METHOD("screen_get_refresh_rate", "screen"), &DisplayServer::screen_get_refresh_rate, DEFVAL(SCREEN_OF_MAIN_WINDOW));
 	ClassDB::bind_method(D_METHOD("screen_get_pixel", "position"), &DisplayServer::screen_get_pixel);
 	ClassDB::bind_method(D_METHOD("screen_get_image", "screen"), &DisplayServer::screen_get_image, DEFVAL(SCREEN_OF_MAIN_WINDOW));

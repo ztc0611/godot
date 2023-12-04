@@ -2144,9 +2144,10 @@ Error Main::setup(const char *execpath, int argc, char *argv[], bool p_second_ph
 	}
 
 	GLOBAL_DEF("display/window/ios/allow_high_refresh_rate", true);
-	GLOBAL_DEF("display/window/ios/hide_home_indicator", true);
-	GLOBAL_DEF("display/window/ios/hide_status_bar", true);
-	GLOBAL_DEF("display/window/ios/suppress_ui_gesture", true);
+	GLOBAL_DEF_BASIC("display/window/ios/hide_home_indicator", false);
+	GLOBAL_DEF_BASIC("display/window/ios/hide_status_bar", true);
+	GLOBAL_DEF_BASIC("display/window/ios/suppress_top_ui_gesture", true);
+	GLOBAL_DEF_BASIC("display/window/ios/suppress_bottom_ui_gesture", true);
 
 	// XR project settings.
 	GLOBAL_DEF_RST_BASIC("xr/openxr/enabled", false);

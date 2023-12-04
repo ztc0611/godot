@@ -442,6 +442,25 @@ int DisplayServerIOS::screen_get_dpi(int p_screen) const {
 	}
 }
 
+void DisplayServerIOS::ios_set_ui_state(bool hide_home_indicator, bool suppress_bottom_ui_gesture, bool suppress_top_ui_gesture, bool hide_status_bar, float status_bar_fade_time) {
+
+	ProjectSettings::get_singleton()->set_setting("display/window/ios/hide_home_indicator", hide_home_indicator);
+	ProjectSettings::get_singleton()->set_setting("display/window/ios/suppress_bottom_ui_gesture", suppress_bottom_ui_gesture);
+	ProjectSettings::get_singleton()->set_setting("display/window/ios/suppress_top_ui_gesture", suppress_top_ui_gesture);
+	ProjectSettings::get_singleton()->set_setting("display/window/ios/hide_status_bar", hide_status_bar);
+
+	[AppDelegate.viewController setNeedsUpdateOfHomeIndicatorAutoHidden];
+	[AppDelegate.viewController setNeedsUpdateOfScreenEdgesDeferringSystemGestures];
+
+	if (status_bar_fade_time > 0) {
+		[UIView animateWithDuration:status_bar_fade_time animations:^{
+            [AppDelegate.viewController setNeedsStatusBarAppearanceUpdate];
+        }];
+	} else {
+		[AppDelegate.viewController setNeedsStatusBarAppearanceUpdate];
+	}
+}
+
 float DisplayServerIOS::screen_get_refresh_rate(int p_screen) const {
 	return [UIScreen mainScreen].maximumFramesPerSecond;
 }

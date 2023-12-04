@@ -162,6 +162,7 @@
 	[self displayLoadingOverlay];
 
 	[self setNeedsUpdateOfScreenEdgesDeferringSystemGestures];
+	[self setNeedsStatusBarAppearanceUpdate];
 }
 
 - (void)observeKeyboard {
@@ -220,15 +221,25 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-// MARK: Orientation
-
 - (UIRectEdge)preferredScreenEdgesDeferringSystemGestures {
-	if (GLOBAL_GET("display/window/ios/suppress_ui_gesture")) {
-		return UIRectEdgeAll;
-	} else {
+
+	bool top_gesture = GLOBAL_GET("display/window/ios/suppress_top_ui_gesture");
+	bool bottom_gesture = GLOBAL_GET("display/window/ios/suppress_bottom_ui_gesture");
+
+	if (!top_gesture && !bottom_gesture) {
 		return UIRectEdgeNone;
+	} else if (top_gesture && bottom_gesture) {
+		return UIRectEdgeAll;
+	} else if (!top_gesture && bottom_gesture) {
+		return UIRectEdgeBottom;
+	} else if (top_gesture && !bottom_gesture) {
+		return UIRectEdgeTop;
 	}
+
+	return UIRectEdgeNone;
 }
+
+// MARK: Orientation
 
 - (BOOL)shouldAutorotate {
 	if (!DisplayServerIOS::get_singleton()) {
