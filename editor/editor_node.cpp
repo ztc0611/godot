@@ -7790,6 +7790,12 @@ EditorNode::EditorNode() {
 	gui_base->add_child(file_script);
 	file_script->connect("file_selected", callable_mp(this, &EditorNode::_dialog_action));
 
+#ifdef MACOS_ENABLED
+	if (global_menu) {
+		apple_menu->connect("id_pressed", callable_mp(this, &EditorNode::_menu_option));
+	}
+#endif
+
 	file_menu->connect("id_pressed", callable_mp(this, &EditorNode::_menu_option));
 	file_menu->connect("about_to_popup", callable_mp(this, &EditorNode::_update_file_menu_opened));
 	file_menu->connect("popup_hide", callable_mp(this, &EditorNode::_update_file_menu_closed));
