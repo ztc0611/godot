@@ -646,14 +646,15 @@ void SceneShaderForwardMobile::init(const String p_defines) {
 // Default 3D material shader (mobile).
 
 shader_type spatial;
+render_mode diffuse_toon,specular_disabled;
 
 void vertex() {
-	ROUGHNESS = 0.8;
+	ROUGHNESS = 0.0;
 }
 
 void fragment() {
 	ALBEDO = vec3(0.6);
-	ROUGHNESS = 0.8;
+	ROUGHNESS = 0.0;
 	METALLIC = 0.2;
 }
 )");

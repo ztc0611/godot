@@ -361,7 +361,7 @@ void AnimationPlayer::play_backwards(const StringName &p_name, double p_custom_b
 	play(p_name, p_custom_blend, -1, true);
 }
 
-void AnimationPlayer::play(const StringName &p_name, double p_custom_blend, float p_custom_scale, bool p_from_end) {
+void AnimationPlayer::play(const StringName &p_name, double p_custom_blend, double p_custom_blend_left, float p_custom_scale, bool p_from_end) {
 	StringName name = p_name;
 
 	if (String(name) == "") {
@@ -403,7 +403,11 @@ void AnimationPlayer::play(const StringName &p_name, double p_custom_blend, floa
 		if (blend_time > 0) {
 			Blend b;
 			b.data = c.current;
-			b.blend_left = 1.0;
+			if (p_custom_blend_left >= 0) {
+				b.blend_left = blend_time - p_custom_blend_left; //Add ability to advance to different part of custom blend.
+			} else {
+				b.blend_left = 1.0;
+			}
 			b.blend_time = blend_time;
 			c.blend.push_back(b);
 		} else {
@@ -744,7 +748,7 @@ void AnimationPlayer::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_default_blend_time", "sec"), &AnimationPlayer::set_default_blend_time);
 	ClassDB::bind_method(D_METHOD("get_default_blend_time"), &AnimationPlayer::get_default_blend_time);
 
-	ClassDB::bind_method(D_METHOD("play", "name", "custom_blend", "custom_speed", "from_end"), &AnimationPlayer::play, DEFVAL(""), DEFVAL(-1), DEFVAL(1.0), DEFVAL(false));
+	ClassDB::bind_method(D_METHOD("play", "name", "custom_blend", "custom_blend_left" "custom_speed", "from_end"), &AnimationPlayer::play, DEFVAL(""), DEFVAL(-1), DEFVAL(-1), DEFVAL(1.0), DEFVAL(false));
 	ClassDB::bind_method(D_METHOD("play_backwards", "name", "custom_blend"), &AnimationPlayer::play_backwards, DEFVAL(""), DEFVAL(-1));
 	ClassDB::bind_method(D_METHOD("pause"), &AnimationPlayer::pause);
 	ClassDB::bind_method(D_METHOD("stop", "keep_state"), &AnimationPlayer::stop, DEFVAL(false));
