@@ -408,7 +408,6 @@ void AnimationPlayer::play(const StringName &p_name, double p_custom_blend, doub
 			} else {
 				b.blend_left = 1.0;
 			}
-			b.blend_left = 1.0;
 			b.blend_time = blend_time;
 			c.blend.push_back(b);
 		} else {
